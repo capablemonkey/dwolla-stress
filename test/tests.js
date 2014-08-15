@@ -5,6 +5,34 @@ var dwolla = require('dwolla-node')(keys.appKey, keys.appSecret);
 
 dwolla.sandbox = true;
 
+function LoadTest(testName, numIterations, targetFn, callback) {
+	var results = [];
+
+	// start timer
+	var profiler = new execTime('send');
+	profiler.beginProfiling();
+	profiler.step('Starting to make requests');
+
+	_.range(numIterations).forEach(function(id) {
+		profiler.step('Sending request #' + id);
+
+		targetFn(function(err, data) {
+	   	profiler.step('Received response for request #' + id);
+
+	   	// print out error, or transaction ID
+   		console.log(data || err);
+   		results.push({requestId: id, response: data || err, timeSinceBeginning: profiler.elapsedSinceBeginning()});
+
+	   	if (results.length == numIterations) {
+	   		console.log("Response log:", results);
+	   		callback();
+	   	}
+		});
+	});
+
+	profiler.step('All requests fired off');
+}
+
 // TEST 1: 
 // (we may want to implement a specific interval between requests)
 dwolla.setToken(keys.accessToken);
@@ -14,31 +42,10 @@ describe('Transactions / Send', function() {
 		// override mocha's default timeout of 2000 ms.
 		this.timeout(5000000);
 
-		var results = [];
+		LoadTest('send-1000', 20, function(callback) {
+			dwolla.send('9999', 'gordon@dwolla.com', 1.00, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, callback);
+		}, done);
 
-		// start timer
-		var profiler = new execTime('send');
-		profiler.beginProfiling();
-		profiler.step('Starting to make requests');
-
-		_.range(20).forEach(function(id) {
-			profiler.step('Sending request #' + id);
-
-			dwolla.send('9999', 'gordon@dwolla.com', 1.00, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, function(err, data) {
-		   	profiler.step('Received response for request #' + id);
-
-		   	// print out error, or transaction ID
-	   		console.log(data || err);
-	   		results.push({requestId: id, response: data || err, timeSinceBeginning: profiler.elapsedSinceBeginning()});
-
-		   	if (results.length == 20) {
-		   		console.log(results);
-		   		done();
-		   	}
-			});
-		});
-
-		profiler.step('All requests fired off');
 	});
 });
 
