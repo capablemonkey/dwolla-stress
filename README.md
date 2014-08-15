@@ -17,7 +17,7 @@ Put your API credentials into `keys.js` and run tests:
 
 ## Method of action
 
-All the desired requests are made asynchronously and, in practice, not quite simultaneously (seem to be within <=1 ms between each other), but close.
+All the desired requests are made asynchronously and, in practice, are sent not quite simultaneously (seem to be within <=1 ms between each other), but pretty quick.
 
 ```
 accountinfo-1000 - Begin profiling
@@ -55,6 +55,8 @@ accountinfo-1000 - Received response for request #1 - 9ms (total: 557ms)
   Longitude: 0 }
 ```
 
+Notice that the responses won't necessarily come in the order which they were sent.
+
 When all the responses have arrived, we spit out a report:
 
 ```
@@ -72,7 +74,9 @@ Average response time:  750.8 ms
 
 ## Writing tests
 
-Writing tests is easy.  We use the [mocha](http://visionmedia.github.io/mocha/) framework for testing.  The `loadTest` function wraps the load testing functionality.  So, all you need to do is create a new test where you call loadTest, passing in a name for the test, number of times to make the API call, a bounded function containing the API call you want to make, and mocha's `done()` function as a callback.
+Writing tests is easy.  We use the [mocha](http://visionmedia.github.io/mocha/) framework for testing.  
+
+The `loadTest` function wraps the load testing functionality.  So, all you need to do is create a new test in `test/tests.js`where you call loadTest, passing in a name for the test, number of times to make the API call, a bounded function containing the API call you want to make, and mocha's `done()` function as a callback.
 
 ```
 describe('Account Info', function() {
