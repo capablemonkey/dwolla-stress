@@ -45,8 +45,8 @@ function loadTest(testName, numIterations, targetFn, callback) {
 	   		var totalResponseTimeInterval = _.reduce(results, function(prev, curr){ return prev + curr.timeSinceLastResponse; }, 0);
 	   		var successfulResponses = _.where(results, {success: true});
 
-	   		var shortestResponseTime = _.max(results, function(result){ return result.timeSinceBeginning;});
-	   		var longestResponseTime =  _.min(results, function(result){ return result.timeSinceBeginning;});
+	   		var shortestResponseTime = _.min(results, function(result){ return result.timeSinceBeginning;});
+	   		var longestResponseTime =  _.max(results, function(result){ return result.timeSinceBeginning;});
 	   		var totalResponseTime = _.reduce(results, function(prev, curr){ return prev + curr.timeSinceBeginning; }, 0);
 
 	   		console.log(" === LOOK MA', STATS! ===");
