@@ -11,6 +11,6 @@ Install mocha:
 
 `npm install -g mocha`
 
-Run tests:
+Put your API credentials into `keys.js` and run tests:
 
 `mocha`
