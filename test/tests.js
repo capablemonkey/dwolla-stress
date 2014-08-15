@@ -11,7 +11,7 @@ function loadTest(testName, numIterations, targetFn, callback) {
 	var results = [];
 
 	// start timer
-	var profiler = new execTime('send');
+	var profiler = new execTime(testName);
 	profiler.beginProfiling();
 	profiler.step('Starting to make requests');
 
@@ -77,9 +77,6 @@ function loadTest(testName, numIterations, targetFn, callback) {
 
 describe('Transactions / Send', function() {
 	it('1000 Send requests in quick succession', function(done) {
-		// override mocha's default timeout of 2000 ms.
-		this.timeout(5000000);
-
 		dwolla.setToken(keys.accessToken);
 
 		loadTest('send-1000', 20, function(callback) {
@@ -101,13 +98,9 @@ describe('Transactions / Send', function() {
 
 describe('Account Info', function() {
 	it('1000 Account Info requests in quick succession', function(done) {
-		// override mocha's default timeout of 2000 ms.
-		this.timeout(5000000);
-
 		loadTest('accountinfo-1000', 20, function(callback) {
 			dwolla.basicAccountInfo('gordon@dwolla.com', callback);
 		}, done);
-
 	});
 });
 
