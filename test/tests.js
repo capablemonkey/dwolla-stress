@@ -99,6 +99,18 @@ describe('Transactions / Send', function() {
 
 // TEST 6: 1000 AccountInfo lookups in quick succession
 
+describe('Account Info', function() {
+	it('1000 Account Info requests in quick succession', function(done) {
+		// override mocha's default timeout of 2000 ms.
+		this.timeout(5000000);
+
+		loadTest('accountinfo-1000', 20, function(callback) {
+			dwolla.basicAccountInfo('gordon@dwolla.com', callback);
+		}, done);
+
+	});
+});
+
 // TEST 7: 1000 Requests created in quick succession
 
 // TEST 8: 1000 requests fulfilled in quick succession
