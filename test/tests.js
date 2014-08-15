@@ -62,7 +62,7 @@ function loadTest(testName, numIterations, targetFn, callback) {
 	   		console.log(' ');
 	   		console.log('Shortest response time: ', shortestResponseTime.timeSinceBeginning, 'ms');
 	   		console.log('Longest response time: ', longestResponseTime.timeSinceBeginning, 'ms');
-	   		console.log('Averge response time: ', totalResponseTime / results.length, 'ms');
+	   		console.log('Average response time: ', totalResponseTime / results.length, 'ms');
 	   		
 	   		callback();
 	   	}
