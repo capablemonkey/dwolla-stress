@@ -29,9 +29,10 @@ describe('Transactions / Send', function() {
 
 		   	// print out error, or transaction ID
 	   		console.log(data || err);
-	   		results.push({id: id, result: data || err});
+	   		results.push({requestId: id, response: data || err, timeSinceBeginning: profiler.elapsedSinceBeginning()});
 
 		   	if (results.length == 20) {
+		   		console.log(results);
 		   		done();
 		   	}
 			});
