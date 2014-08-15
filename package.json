@@ -3,6 +3,7 @@
 		"dwolla-node": "*",
 		"underscore": "1.6.0",
 		"exec-time": "*",
+		"google-autocomplete": "*",
 		"mocha": "1.21"
 	}
 }
