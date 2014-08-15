@@ -13,9 +13,13 @@ Install mocha:
 
 `npm install -g mocha`
 
-Put your API credentials into `keys.js` and run tests:
+Put your API credentials into `keys.js` run _all_ tests:
 
 `mocha`
+
+Or, run an individual test:
+
+`mocha test/accountInfo.js`
 
 ## Method of action
 
