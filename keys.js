@@ -1,5 +1,6 @@
 module.exports = {
 	appKey: '',
 	appSecret: '',
-	accessToken: ''
+	accessToken: '',
+	sandbox: true
 };
