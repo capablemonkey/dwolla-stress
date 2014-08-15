@@ -67,8 +67,8 @@ Longest time between responses:  493 ms
 Shortest time between responses:  2 ms
 Average response time interval:  48.05 ms
 
-Shortest response time:  991 ms
-Longest response time:  520 ms
+Shortest response time:  520 ms 
+Longest response time:  991 ms
 Average response time:  750.8 ms
 ```
 
