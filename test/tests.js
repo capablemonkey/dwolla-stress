@@ -5,7 +5,7 @@ var dwolla = require('dwolla-node')(keys.appKey, keys.appSecret);
 
 dwolla.sandbox = true;
 
-function LoadTest(testName, numIterations, targetFn, callback) {
+function loadTest(testName, numIterations, targetFn, callback) {
 	var results = [];
 
 	// start timer
@@ -42,7 +42,7 @@ describe('Transactions / Send', function() {
 		// override mocha's default timeout of 2000 ms.
 		this.timeout(5000000);
 
-		LoadTest('send-1000', 20, function(callback) {
+		loadTest('send-1000', 20, function(callback) {
 			dwolla.send('9999', 'gordon@dwolla.com', 1.00, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, callback);
 		}, done);
 
