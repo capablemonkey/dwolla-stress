@@ -3,6 +3,8 @@
 Stress testing Dwolla's API.  Let's see what happens when we try to make 1000 API calls (nearly) simultaneously.
 
 ## Get started
+This is built with node.js.  You'll need to have that installed!
+
 Clone the project.  Install depedencies:
 
 `npm install`
