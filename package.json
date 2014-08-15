@@ -1,6 +1,6 @@
 {
 	"dependencies": {
-		"dwolla-node": "*",
+		"dwolla-node": "git+https://github.com/capablemonkey/dwolla-node#2ddb0edf58c607cee299f8d7470e2747db80e548",
 		"underscore": "1.6.0",
 		"exec-time": "*",
 		"google-autocomplete": "*",
