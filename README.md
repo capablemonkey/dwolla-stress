@@ -9,7 +9,7 @@ Clone the project.  Install depedencies:
 
 `npm install`
 
-Install mocha:
+Install mocha if you don't already have it:
 
 `npm install -g mocha`
 
