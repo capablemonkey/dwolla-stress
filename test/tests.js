@@ -17,14 +17,39 @@ function loadTest(testName, numIterations, targetFn, callback) {
 		profiler.step('Sending request #' + id);
 
 		targetFn(function(err, data) {
+			// save time since last response before 'stepping' so that
+			// we can include it in results later. 
+			// TODO: figure out - does this operation significantly impact accuracy of time logged?
+			var timeSinceLastResponse = profiler.elapsedSinceLastStep();
 	   	profiler.step('Received response for request #' + id);
 
-	   	// print out error, or response
-   		console.log(data || err);
-   		results.push({requestId: id, response: data || err, timeSinceBeginning: profiler.elapsedSinceBeginning()});
+	   	// log result:
+   		results.push({
+   			requestId: id, 
+   			success: err ? false : true,
+   			response: err || data, 
+   			timeSinceBeginning: profiler.elapsedSinceBeginning(),
+   			timeSinceLastResponse: timeSinceLastResponse
+   		});
+
+   		// print out error, or response
+   		console.log(err || data);
 
 	   	if (results.length == numIterations) {
-	   		console.log("Response log:", results);
+	   		// console.log("Response log:", results);
+
+	   		var longestResponseTime = _.max(results, function(result){ return result.timeSinceLastResponse;});
+	   		var shortestResponseTime = _.min(results, function(result){ return result.timeSinceLastResponse;});
+	   		var totalResponseTime = _.reduce(results, function(prev, curr){ return prev + curr.timeSinceLastResponse; }, 0);
+	   		var successfulResponses = _.where(results, {success: true});
+
+	   		console.log(" === LOOK MA', STATS! ===");
+	   		console.log('Number of requests: ', results.length);
+	   		console.log('Successful responses: ', successfulResponses.length);
+	   		console.log('% success: ', (successfulResponses.length / results.length * 100).toFixed(2));
+	   		console.log('Longest response time: ', longestResponseTime.timeSinceLastResponse, 'ms');
+	   		console.log('Shortest response time: ', shortestResponseTime.timeSinceLastResponse, 'ms');
+	   		console.log('Average response time: ', totalResponseTime / results.length, 'ms');
 	   		callback();
 	   	}
 		});
@@ -42,7 +67,7 @@ describe('Transactions / Send', function() {
 
 		dwolla.setToken(keys.accessToken);
 
-		loadTest('send-1000', 1000, function(callback) {
+		loadTest('send-1000', 20, function(callback) {
 			dwolla.send('9999', 'gordon@dwolla.com', 1.00, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, callback);
 		}, done);
 
