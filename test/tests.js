@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var timer = require('exectimer');
+var execTime = require('exec-time');
 var keys = require('../keys.js');
 var dwolla = require('dwolla-node')(keys.appKey, keys.appSecret);
 
@@ -11,46 +11,37 @@ dwolla.setToken(keys.accessToken);
 
 describe('Transactions / Send', function() {
 	it('1000 Send requests in quick succession', function(done) {
+		// override mocha's default timeout of 2000 ms.
 		this.timeout(5000000);
 
-		var sendResults = [];
+		var results = [];
+
+		// start timer
+		var profiler = new execTime('send');
+		profiler.beginProfiling();
+		profiler.step('Starting to make requests');
 
 		_.range(20).forEach(function(id) {
-			// start timer
-			var t = new timer.tick('send');
-			t.start();
-			// console.time(id);
+			profiler.step('Sending request #' + id);
 
 			dwolla.send('9999', 'gordon@dwolla.com', 1.00, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, function(err, data) {
-		   	// end timer, print to console:
-		   	t.stop();
-		   	// console.timeEnd(id);
+		   	profiler.step('Received response for request #' + id);
 
 		   	// print out error, or transaction ID
-		   	if (err) { 
-		   		console.log(err); 
-		   		sendResults.push({id: id, result: err});
-		   	}
-		   	else {
-		   		console.log(data);
-		   		sendResults.push({id: id, result: data});
-		   	}
+	   		console.log(data || err);
+	   		results.push({id: id, result: data || err});
 
-		   	if (sendResults.length == 20) {
-		   	 // console.log('duration ', timer.timers.send.duration()); // total duration of all ticks
-				 // console.log('min ', timer.timers.send.min()); // minimal tick duration
-				 // console.log('max ', timer.timers.send.max()); // maximal tick duration
-				 // console.log('mean ', timer.timers.send.mean()); // mean tick duration
-				 // console.log('median ',timer.timers.send.median()); // median tick duration
+		   	if (results.length == 20) {
 		   		done();
 		   	}
 			});
 		});
 
+		profiler.step('All requests fired off');
 	});
 });
 
-// var sendResults = [];
+// var results = [];
 
 // _.range(1000).forEach(function(id) {
 // 	// start timer
