@@ -72,6 +72,16 @@ function loadTest(testName, numIterations, targetFn, callback) {
 	profiler.step('All requests fired off');
 }
 
+// TEST 0: 1000 AccountInfo lookups in quick succession
+
+describe('Account Info', function() {
+	it('1000 Account Info requests in quick succession', function(done) {
+		loadTest('accountinfo-1000', 20, function(callback) {
+			dwolla.basicAccountInfo('gordon@dwolla.com', callback);
+		}, done);
+	});
+});
+
 // TEST 1: 
 // (TODO: we may want to implement a specific interval between requests)
 
@@ -93,16 +103,6 @@ describe('Transactions / Send', function() {
 // TEST 4: 1000 MassPay jobs each with 100 items in quick succession
 
 // TEST 5: 1000 AccountInfoFull lookups in quick succession
-
-// TEST 6: 1000 AccountInfo lookups in quick succession
-
-describe('Account Info', function() {
-	it('1000 Account Info requests in quick succession', function(done) {
-		loadTest('accountinfo-1000', 20, function(callback) {
-			dwolla.basicAccountInfo('gordon@dwolla.com', callback);
-		}, done);
-	});
-});
 
 // TEST 7: 1000 Requests created in quick succession
 
