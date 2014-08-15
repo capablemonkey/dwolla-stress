@@ -1,8 +1,10 @@
 var _ = require('underscore');
 var execTime = require('exec-time');
 var keys = require('../keys.js');
+var util = require('util');
 var dwolla = require('dwolla-node')(keys.appKey, keys.appSecret);
 
+// flag to false to test production API
 dwolla.sandbox = true;
 
 function loadTest(testName, numIterations, targetFn, callback) {
@@ -38,18 +40,30 @@ function loadTest(testName, numIterations, targetFn, callback) {
 	   	if (results.length == numIterations) {
 	   		// console.log("Response log:", results);
 
-	   		var longestResponseTime = _.max(results, function(result){ return result.timeSinceLastResponse;});
-	   		var shortestResponseTime = _.min(results, function(result){ return result.timeSinceLastResponse;});
-	   		var totalResponseTime = _.reduce(results, function(prev, curr){ return prev + curr.timeSinceLastResponse; }, 0);
+	   		var longestResponseTimeInterval = _.max(results, function(result){ return result.timeSinceLastResponse;});
+	   		var shortestResponseTimeInterval = _.min(results, function(result){ return result.timeSinceLastResponse;});
+	   		var totalResponseTimeInterval = _.reduce(results, function(prev, curr){ return prev + curr.timeSinceLastResponse; }, 0);
 	   		var successfulResponses = _.where(results, {success: true});
 
+	   		var shortestResponseTime = _.max(results, function(result){ return result.timeSinceBeginning;});
+	   		var longestResponseTime =  _.min(results, function(result){ return result.timeSinceBeginning;});
+	   		var totalResponseTime = _.reduce(results, function(prev, curr){ return prev + curr.timeSinceBeginning; }, 0);
+
 	   		console.log(" === LOOK MA', STATS! ===");
-	   		console.log('Number of requests: ', results.length);
-	   		console.log('Successful responses: ', successfulResponses.length);
-	   		console.log('% success: ', (successfulResponses.length / results.length * 100).toFixed(2));
-	   		console.log('Longest response time: ', longestResponseTime.timeSinceLastResponse, 'ms');
-	   		console.log('Shortest response time: ', shortestResponseTime.timeSinceLastResponse, 'ms');
-	   		console.log('Average response time: ', totalResponseTime / results.length, 'ms');
+	   		console.log(util.format('%s requests fired, of which we got back %s successful responses (%s% success rate)', 
+	   			results.length,
+	   			successfulResponses.length,
+	   			(successfulResponses.length / results.length * 100).toFixed(2)
+	   		));
+	   		console.log(' ');
+	   		console.log('Longest time between responses: ', longestResponseTimeInterval.timeSinceLastResponse, 'ms');
+	   		console.log('Shortest time between responses: ', shortestResponseTimeInterval.timeSinceLastResponse, 'ms');
+	   		console.log('Average response time interval: ', totalResponseTimeInterval / results.length, 'ms');
+	   		console.log(' ');
+	   		console.log('Shortest response time: ', shortestResponseTime.timeSinceBeginning, 'ms');
+	   		console.log('Longest response time: ', longestResponseTime.timeSinceBeginning, 'ms');
+	   		console.log('Averge response time: ', totalResponseTime / results.length, 'ms');
+	   		
 	   		callback();
 	   	}
 		});
@@ -59,7 +73,8 @@ function loadTest(testName, numIterations, targetFn, callback) {
 }
 
 // TEST 1: 
-// (we may want to implement a specific interval between requests)
+// (TODO: we may want to implement a specific interval between requests)
+
 describe('Transactions / Send', function() {
 	it('1000 Send requests in quick succession', function(done) {
 		// override mocha's default timeout of 2000 ms.
