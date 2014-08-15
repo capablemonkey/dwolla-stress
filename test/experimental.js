@@ -6,7 +6,7 @@ var loadTest = require('./loadTest.js');
 
 var agent = new http.Agent();
 
-agent.maxSockets = 100;
+agent.maxSockets = 50;
 
 function getGoogle(cb) {
 	http.get({
