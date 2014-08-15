@@ -42,7 +42,7 @@ describe('Transactions / Send', function() {
 
 		dwolla.setToken(keys.accessToken);
 
-		loadTest('send-1000', 20, function(callback) {
+		loadTest('send-1000', 1000, function(callback) {
 			dwolla.send('9999', 'gordon@dwolla.com', 1.00, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, callback);
 		}, done);
 
