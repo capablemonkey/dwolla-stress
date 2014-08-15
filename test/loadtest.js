@@ -1,13 +1,8 @@
 var _ = require('underscore');
 var execTime = require('exec-time');
-var keys = require('../keys.js');
 var util = require('util');
-var dwolla = require('dwolla-node')(keys.appKey, keys.appSecret);
 
-// flag to false to test production API
-dwolla.sandbox = true;
-
-function loadTest(testName, numIterations, targetFn, callback) {
+module.exports = function(testName, numIterations, targetFn, callback) {
 	var results = [];
 
 	// start timer
@@ -70,55 +65,4 @@ function loadTest(testName, numIterations, targetFn, callback) {
 	});
 
 	profiler.step('All requests fired off');
-}
-
-// TEST 0: 1000 AccountInfo lookups in quick succession
-
-describe('Account Info', function() {
-	it('1000 Account Info requests in quick succession', function(done) {
-		loadTest('accountinfo-1000', 1000, function(callback) {
-			dwolla.basicAccountInfo('gordon@dwolla.com', callback);
-		}, done);
-	});
-});
-
-// TEST 1: 
-// (TODO: we may want to implement a specific interval between requests)
-
-describe('Transactions / Send', function() {
-	it('1000 Send requests in quick succession', function(done) {
-		dwolla.setToken(keys.accessToken);
-
-		loadTest('send-1000', 1000, function(callback) {
-			dwolla.send('9999', 'gordon@dwolla.com', 1.00, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, callback);
-		}, done);
-
-	});
-});
-
-// TEST 2: 1000 Gateway Checkout requests in quick succession
-
-
-
-// TEST 3: 1000 Transaction Listing requests (of 200 records each) in quick succession
-
-// TEST 4: 1000 MassPay jobs each with 100 items in quick succession
-
-// TEST 5: 1000 AccountInfoFull lookups in quick succession
-
-// TEST 7: 1000 Requests created in quick succession
-
-// TEST 8: 1000 requests fulfilled in quick succession
-
-// TEST 9: 1000 Balance retrievals in quick succession
-
-// TEST 10: 1000 Contacts listing in quick succession
-
-// TEST 11: 1000 Toggle Autowithdrawal calls in quick succession
-
-// TEST 12: 1000 TransactionStats calls in quick succession
-
-// TEST 13: 1000 Spots calls in quick succession
-
-// TEST 14: 1000 MassPay Items listing calls in quick succession
-
+};

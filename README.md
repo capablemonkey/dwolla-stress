@@ -76,7 +76,19 @@ Average response time:  750.8 ms
 
 Writing tests is easy.  We use the [mocha](http://visionmedia.github.io/mocha/) framework for testing.  
 
-The `loadTest` function wraps the load testing functionality.  So, all you need to do is create a new test in `test/tests.js`where you call loadTest, passing in a name for the test, number of times to make the API call, a bounded function containing the API call you want to make, and mocha's `done()` function as a callback.
+Create a new file in `test/`.  Start it off by importing `dwolla-node`, the keys file, etc.:
+
+```
+var keys = require('../keys.js');
+var dwolla = require('dwolla-node')(keys.appKey, keys.appSecret);
+var loadTest = require('./loadTest.js');
+
+// flag to false to test production API
+dwolla.sandbox = keys.sandbox;
+dwolla.setToken(keys.accessToken);
+```
+
+Then the test itself is simple to write.  The `loadTest` function wraps the load testing functionality.  Just call loadTest, passing in a name for the test, number of times to make the API call, a bounded function containing the API call you want to make, and mocha's `done()` function as a callback.
 
 ```
 describe('Account Info', function() {
