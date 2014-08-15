@@ -76,7 +76,7 @@ function loadTest(testName, numIterations, targetFn, callback) {
 
 describe('Account Info', function() {
 	it('1000 Account Info requests in quick succession', function(done) {
-		loadTest('accountinfo-1000', 20, function(callback) {
+		loadTest('accountinfo-1000', 1000, function(callback) {
 			dwolla.basicAccountInfo('gordon@dwolla.com', callback);
 		}, done);
 	});
@@ -89,7 +89,7 @@ describe('Transactions / Send', function() {
 	it('1000 Send requests in quick succession', function(done) {
 		dwolla.setToken(keys.accessToken);
 
-		loadTest('send-1000', 20, function(callback) {
+		loadTest('send-1000', 1000, function(callback) {
 			dwolla.send('9999', 'gordon@dwolla.com', 1.00, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, callback);
 		}, done);
 
@@ -97,6 +97,8 @@ describe('Transactions / Send', function() {
 });
 
 // TEST 2: 1000 Gateway Checkout requests in quick succession
+
+
 
 // TEST 3: 1000 Transaction Listing requests (of 200 records each) in quick succession
 
