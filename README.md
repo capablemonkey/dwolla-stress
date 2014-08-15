@@ -7,6 +7,10 @@ Install depedencies:
 
 `npm install`
 
+Install mocha:
+
+`npm install -g mocha`
+
 Run tests:
 
-`node app.js`
+`mocha`

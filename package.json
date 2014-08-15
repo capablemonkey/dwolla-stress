@@ -1,6 +1,8 @@
 {
 	"dependencies": {
 		"dwolla-node": "*",
-		"underscore": "*"
+		"underscore": "1.6.0",
+		"exectimer": "0.1.5",
+		"mocha": "1.21.4"
 	}
 }
