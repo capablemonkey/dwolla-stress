@@ -19,7 +19,7 @@ function loadTest(testName, numIterations, targetFn, callback) {
 		targetFn(function(err, data) {
 	   	profiler.step('Received response for request #' + id);
 
-	   	// print out error, or transaction ID
+	   	// print out error, or response
    		console.log(data || err);
    		results.push({requestId: id, response: data || err, timeSinceBeginning: profiler.elapsedSinceBeginning()});
 
@@ -35,12 +35,12 @@ function loadTest(testName, numIterations, targetFn, callback) {
 
 // TEST 1: 
 // (we may want to implement a specific interval between requests)
-dwolla.setToken(keys.accessToken);
-
 describe('Transactions / Send', function() {
 	it('1000 Send requests in quick succession', function(done) {
 		// override mocha's default timeout of 2000 ms.
 		this.timeout(5000000);
+
+		dwolla.setToken(keys.accessToken);
 
 		loadTest('send-1000', 20, function(callback) {
 			dwolla.send('9999', 'gordon@dwolla.com', 1.00, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, callback);
@@ -48,22 +48,6 @@ describe('Transactions / Send', function() {
 
 	});
 });
-
-// var results = [];
-
-// _.range(1000).forEach(function(id) {
-// 	// start timer
-// 	console.time(id);
-
-// 	dwolla.send('9999', 'gordon@dwolla.com', 1.00, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, function(err, data) {
-//    	// end timer, print to console:
-//    	console.timeEnd(id);
-
-//    	// print out error, or transaction ID
-//    	if (err) { console.log(err); }
-//    	else console.log(data);
-// 	});
-// });
 
 // TEST 2: 1000 Gateway Checkout requests in quick succession
 
