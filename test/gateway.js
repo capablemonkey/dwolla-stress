@@ -8,7 +8,7 @@ dwolla.setToken(keys.accessToken);
 
 describe('Gateway', function() {
 	it('1000 Checkout requests in quick succession', function(done) {
-		loadTest('gateway-1000', 20, function(callback) {
+		loadTest('gateway-1000', 1000, function(callback) {
 
 			dwolla.createCheckout('http://google.com', {
 				destinationId: '812-740-4294',
