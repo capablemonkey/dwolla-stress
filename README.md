@@ -3,7 +3,7 @@
 Stress testing Dwolla's API.  Let's see what happens when we try to make 1000 API calls (nearly) simultaneously.
 
 ## Get started
-Install depedencies:
+Clone the project.  Install depedencies:
 
 `npm install`
 
