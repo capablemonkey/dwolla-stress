@@ -1,11 +1,12 @@
-var dwolla = require('dwolla-node')();
 var _ = require('underscore');
+var keys = require('./keys.js');
+var dwolla = require('dwolla-node')(keys.appKey, keys.appSecret);
 
 dwolla.sandbox = true;
 
 // TEST 1: 1000 Send requests in quick succession
 // (we may want to implement a specific interval between requests)
-dwolla.setToken('S1yDn0kfooVoINADOwplpDKsGS14chJ6b5SgRqDwANptCgq4gx');
+dwolla.setToken(keys.accessToken);
 
 var sendResults = [];
 
