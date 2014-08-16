@@ -36,7 +36,10 @@ mockery.registerMock('http', httpMock);
 mockery.registerMock('https', httpsMock);
 
 // executes requests, calculate stat report, print to console
-function loadTest(testName, numIterations, targetFn, callback) {
+function loadTest(testName, numIterations, concurrentRequests, targetFn, callback) {
+	httpAgent.maxSockets = concurrentRequests;
+	httpsAgent.maxSockets = concurrentRequests;
+	
 	executeRequests(testName, numIterations, targetFn, function(results) {
 		var report = calculateStats(results);
  		outputReport(report);
