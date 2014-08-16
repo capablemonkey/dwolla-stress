@@ -8,8 +8,16 @@ dwolla.setToken(keys.accessToken);
 
 describe('Account Info', function() {
 	it('1000 Account Info requests in quick succession', function(done) {
-		loadTest('accountinfo-1000', 1000, 1, function(callback) {
-			dwolla.basicAccountInfo('gordon@dwolla.com', callback);
-		}, done);
+		
+		loadTest({
+			name: 'accountinfo-1000',
+			requests: 1000,
+			concurrentRequests: 100,
+			targetFunction: function(callback) {
+				dwolla.basicAccountInfo('gordon@dwolla.com', callback);
+			},
+			callback: done
+		});
+
 	});
 });

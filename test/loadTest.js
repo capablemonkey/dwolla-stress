@@ -36,15 +36,15 @@ mockery.registerMock('http', httpMock);
 mockery.registerMock('https', httpsMock);
 
 // executes requests, calculate stat report, print to console
-function loadTest(testName, numIterations, concurrentRequests, targetFn, callback) {
-	httpAgent.maxSockets = concurrentRequests;
-	httpsAgent.maxSockets = concurrentRequests;
-	
-	executeRequests(testName, numIterations, targetFn, function(results) {
+function loadTest(config) {
+	httpAgent.maxSockets = config.concurrentRequests;
+	httpsAgent.maxSockets = config.concurrentRequests;
+
+	executeRequests(config.name, config.requests, config.targetFunction, function(results) {
 		var report = calculateStats(results);
  		outputReport(report);
 
- 		callback();
+ 		config.callback();
 	});
 }
 
