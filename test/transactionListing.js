@@ -1,6 +1,6 @@
 var keys = require('../keys.js');
 var dwolla = require('dwolla-node')(keys.appKey, keys.appSecret);
-var loadTest = require('./loadTest.js');
+var loadTest = require('./loadTest.js').loadTest;
 
 // flag to false to test production API
 dwolla.sandbox = keys.sandbox;

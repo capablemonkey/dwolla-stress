@@ -1,6 +1,6 @@
 // Try 1000 requests against google autocomplete, for comparison:
 
-var loadTest = require('./loadTest.js');
+var loadTest = require('./loadTest.js').loadTest;
 var autocomplete = require('google-autocomplete');
 
 describe('Google Autocomplete', function() {

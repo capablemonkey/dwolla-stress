@@ -2,7 +2,16 @@ var _ = require('underscore');
 var execTime = require('exec-time');
 var util = require('util');
 
-module.exports = function(testName, numIterations, targetFn, callback) {
+function loadTest(testName, numIterations, targetFn, callback) {
+	executeRequests(testName, numIterations, targetFn, function(results) {
+		var report = calculateStats(results);
+ 		outputReport(report);
+
+ 		callback();
+	});
+}
+
+function executeRequests(testName, numIterations, targetFn, callback) {
 	var results = [];
 
 	// start timer
@@ -33,36 +42,48 @@ module.exports = function(testName, numIterations, targetFn, callback) {
    		console.log(err || data);
 
 	   	if (results.length == numIterations) {
-	   		// console.log("Response log:", results);
-
-	   		var longestResponseTimeInterval = _.max(results, function(result){ return result.timeSinceLastResponse;});
-	   		var shortestResponseTimeInterval = _.min(results, function(result){ return result.timeSinceLastResponse;});
-	   		var totalResponseTimeInterval = _.reduce(results, function(prev, curr){ return prev + curr.timeSinceLastResponse; }, 0);
-	   		var successfulResponses = _.where(results, {success: true});
-
-	   		var shortestResponseTime = _.min(results, function(result){ return result.timeSinceBeginning;});
-	   		var longestResponseTime =  _.max(results, function(result){ return result.timeSinceBeginning;});
-	   		var totalResponseTime = _.reduce(results, function(prev, curr){ return prev + curr.timeSinceBeginning; }, 0);
-
-	   		console.log(" === LOOK MA', STATS! ===");
-	   		console.log(util.format('%s requests fired, of which we got back %s successful responses (%s% success rate)', 
-	   			results.length,
-	   			successfulResponses.length,
-	   			(successfulResponses.length / results.length * 100).toFixed(2)
-	   		));
-	   		console.log(' ');
-	   		console.log('Longest time between responses: ', longestResponseTimeInterval.timeSinceLastResponse, 'ms');
-	   		console.log('Shortest time between responses: ', shortestResponseTimeInterval.timeSinceLastResponse, 'ms');
-	   		console.log('Average response time interval: ', totalResponseTimeInterval / results.length, 'ms');
-	   		console.log(' ');
-	   		console.log('Shortest response time: ', shortestResponseTime.timeSinceBeginning, 'ms');
-	   		console.log('Longest response time: ', longestResponseTime.timeSinceBeginning, 'ms');
-	   		console.log('Average response time: ', totalResponseTime / results.length, 'ms');
-	   		
-	   		callback();
+	   		callback(results);
 	   	}
 		});
 	});
 
 	profiler.step('All requests fired off');
+}
+
+function calculateStats(results) {
+	var report = {
+		results: results,
+		longestResponseTimeInterval: _.max(results, function(result){ return result.timeSinceLastResponse;}).timeSinceLastResponse,
+		shortestResponseTimeInterval: _.min(results, function(result){ return result.timeSinceLastResponse;}).timeSinceLastResponse,
+		averageResponseTimeInterval: _.reduce(results, function(prev, curr){ return prev + curr.timeSinceLastResponse; }, 0) / results.length,
+		successfulResponses: _.where(results, {success: true}),
+		shortestResponseTime: _.min(results, function(result){ return result.timeSinceBeginning;}),
+		longestResponseTime:  _.max(results, function(result){ return result.timeSinceBeginning;}),
+		averageResponseTime: _.reduce(results, function(prev, curr){ return prev + curr.timeSinceBeginning; }, 0) / results.length
+	};
+
+	return report;
+}
+
+// Print out stat report
+function outputReport(report) {
+	// console.log("Response log:", results);
+	console.log(" === LOOK MA', STATS! ===");
+	console.log(util.format('%s requests fired, of which we got back %s successful responses (%s% success rate)', 
+		report.results.length,
+		report.successfulResponses.length,
+		(report.successfulResponses.length / report.results.length * 100).toFixed(2)
+	));
+	console.log(' ');
+	console.log('Longest time between responses: ', report.longestResponseTimeInterval, 'ms');
+	console.log('Shortest time between responses: ', report.shortestResponseTimeInterval, 'ms');
+	console.log('Average response time interval: ', report.averageResponseTimeInterval , 'ms');
+	console.log(' ');
+	console.log('Shortest response time: ', report.shortestResponseTime.timeSinceBeginning, 'ms');
+	console.log('Longest response time: ', report.longestResponseTime.timeSinceBeginning, 'ms');
+	console.log('Average response time: ', report.averageResponseTime , 'ms');
+}
+
+module.exports = {
+	loadTest: loadTest
 };
