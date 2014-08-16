@@ -1,7 +1,41 @@
 var _ = require('underscore');
 var execTime = require('exec-time');
 var util = require('util');
+var mockery = require('mockery');
+var http = require('http');
+var https = require('https');
+var clone = require('clone');
 
+// Use mockery to force the agent option of http.request
+// and https.request by mocking http and https and overriding request
+
+mockery.enable({
+    warnOnReplace: false,
+    warnOnUnregistered: false
+});
+
+var httpsAgent = new https.Agent();
+var httpAgent = new http.Agent();
+
+httpsAgent.maxSockets = 100;
+httpAgent.maxSockets = 100;
+
+var httpMock = clone(http);
+httpMock.request = function (options, cb) {
+	options.agent = httpAgent;
+	return http.request(options, cb);
+}
+
+var httpsMock = clone(https); 
+httpsMock.request = function(options, cb) {
+	options.agent = httpsAgent;
+	return https.request(options, cb);
+}
+
+mockery.registerMock('http', httpMock);
+mockery.registerMock('https', httpsMock);
+
+// executes requests, calculate stat report, print to console
 function loadTest(testName, numIterations, targetFn, callback) {
 	executeRequests(testName, numIterations, targetFn, function(results) {
 		var report = calculateStats(results);

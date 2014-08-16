@@ -1,9 +1,11 @@
 {
-	"dependencies": {
-		"dwolla-node": "git+https://github.com/capablemonkey/dwolla-node#2ddb0edf58c607cee299f8d7470e2747db80e548",
-		"underscore": "1.6.0",
-		"exec-time": "*",
-		"google-autocomplete": "*",
-		"mocha": "1.21"
-	}
+  "dependencies": {
+    "clone": "^0.1.17",
+    "dwolla-node": "*",
+    "exec-time": "*",
+    "google-autocomplete": "*",
+    "mocha": "1.21",
+    "mockery": "^1.4.0",
+    "underscore": "1.6.0"
+  }
 }

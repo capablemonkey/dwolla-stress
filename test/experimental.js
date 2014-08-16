@@ -1,8 +1,8 @@
 // experimental: can we do 1000 simultaneous requests?
 // trying to maximize maxSockets, so we can truly send simultaneous requests...
 
-var http = require('http');
 var loadTest = require('./loadTest.js').loadTest;
+var http = require('http');
 
 var agent = new http.Agent();
 
