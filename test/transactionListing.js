@@ -20,7 +20,7 @@ describe('Transactions / Send', function() {
 			targetFunction: function(callback) {
 				dwolla.transactions({limit: 200}, callback);
 			},
-			showResponses: false,
+			printResponses: false,
 			callback: done
 		});
 

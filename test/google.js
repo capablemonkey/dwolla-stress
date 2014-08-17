@@ -13,7 +13,7 @@ describe('Google Autocomplete', function() {
 			targetFunction: function(callback) {
 				autocomplete.getQuerySuggestions('foo', callback);
 			},
-			showResponses: false,
+			printResponses: false,
 			callback: done
 		});
 

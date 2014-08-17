@@ -23,6 +23,7 @@ describe('Gateway', function() {
 	    	}, callback);
 
 			},
+			printResponses: false,
 			callback: done
 		});
 	});

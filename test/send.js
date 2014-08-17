@@ -20,7 +20,7 @@ describe('Transactions / Send', function() {
 			targetFunction: function(callback) {
 				dwolla.send('9999', 'n@dwolla.com', 0.33, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, callback);
 			},
-			showResponses: false,
+			printResponses: false,
 			callback: done
 		});
 
