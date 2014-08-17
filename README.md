@@ -86,7 +86,7 @@ Writing tests is easy.  We use the [mocha](http://visionmedia.github.io/mocha/) 
 
 Create a new file in `test/`.  Start it off by importing the keys file, `arete` and`dwolla-node`, in that order.
 
-```
+```javascript
 var keys = require('../keys.js');
 var arete = require('arete');
 var dwolla = require('dwolla-node')(keys.appKey, keys.appSecret);
@@ -98,7 +98,7 @@ dwolla.setToken(keys.accessToken);
 
 Then the test itself is simple to write.  The arete module wraps the load testing functionality and overrides `http` and `https` so that it can force the max number of concurrent connections.  Just call `arete.loadTest`, passing in a config object with the name for the test, number of times to make the API call, a bounded function containing the API call you want to make, and mocha's `done()` function as a callback.
 
-```
+```javascript
 describe('Account Info', function() {
 	it('1000 Account Info requests in quick succession', function(done) {
 		
@@ -109,7 +109,7 @@ describe('Account Info', function() {
 			targetFunction: function(callback) {
 				dwolla.basicAccountInfo('gordon@dwolla.com', callback);
 			},
-			showResponses: false,
+			printResponses: false,
 			callback: done
 		});
 
