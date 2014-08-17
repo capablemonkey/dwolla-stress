@@ -2,6 +2,8 @@
 
 Stress testing Dwolla's API.  Let's see what happens when we try to make 1000 API calls (nearly) simultaneously.
 
+This project inspired me to create [arete](https://github.com/capablemonkey/arete), a load testing library, which dwolla-stress now depends on.
+
 ## Get started
 This is built with node.js.  You'll need to have that installed!
 

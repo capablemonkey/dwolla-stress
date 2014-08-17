@@ -1,5 +1,5 @@
 var keys = require('../keys.js');
-var loadTest = require('./loadTest.js').loadTest;
+var arete = require('arete');
 var dwolla = require('dwolla-node')(keys.appKey, keys.appSecret);
 
 // flag to false to test production API
@@ -13,9 +13,16 @@ describe('Transactions / Send', function() {
 	it('1000 Send requests in quick succession', function(done) {
 		dwolla.setToken(keys.accessToken);
 
-		loadTest('send-1000', 1000, function(callback) {
-			dwolla.send('9999', 'n@dwolla.com', 0.33, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, callback);
-		}, done);
+		arete.loadTest({
+			name: 'send-1000',
+			requests: 1000,
+			concurrentRequests: 100,
+			targetFunction: function(callback) {
+				dwolla.send('9999', 'n@dwolla.com', 0.33, {destinationType: 'Email', notes: 'Thanks for the coffee!'}, callback);
+			},
+			showResponses: false,
+			callback: done
+		});
 
 	});
 });

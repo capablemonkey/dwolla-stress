@@ -1,5 +1,5 @@
 var keys = require('../keys.js');
-var loadTest = require('./loadTest.js').loadTest;
+var arete = require('arete');
 var dwolla = require('dwolla-node')(keys.appKey, keys.appSecret);
 
 // flag to false to test production API
@@ -8,16 +8,22 @@ dwolla.setToken(keys.accessToken);
 
 describe('Gateway', function() {
 	it('1000 Checkout requests in quick succession', function(done) {
-		loadTest('gateway-1000', 1000, function(callback) {
+		arete.loadTest({
+			name:'gateway-1000', 
+			requests: 1000, 
+			concurrentRequests: 100,
+			targetFunction: function(callback) {
 
-			dwolla.createCheckout('http://google.com', {
-				destinationId: '812-740-4294',
-     		total: '5.00'
-			}, {
-     		allowFundingSources: true,
-     		orderId: 'blah',
-    	}, callback);
+				dwolla.createCheckout('http://google.com', {
+					destinationId: '812-740-4294',
+	     		total: '5.00'
+				}, {
+	     		allowFundingSources: true,
+	     		orderId: 'blah',
+	    	}, callback);
 
-		}, done);
+			},
+			callback: done
+		});
 	});
 });

@@ -1,11 +1,9 @@
 {
   "dependencies": {
-    "clone": "^0.1.17",
     "dwolla-node": "*",
-    "exec-time": "*",
     "google-autocomplete": "*",
     "mocha": "1.21",
-    "mockery": "^1.4.0",
-    "underscore": "1.6.0"
+    "underscore": "1.6.0",
+    "arete": "0.1.0"
   }
 }
