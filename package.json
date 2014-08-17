@@ -1,9 +1,10 @@
 {
   "dependencies": {
+    "arete": "0.1.0",
+    "bench-rest": "^0.6.1",
     "dwolla-node": "*",
     "google-autocomplete": "*",
     "mocha": "1.21",
-    "underscore": "1.6.0",
-    "arete": "0.1.0"
+    "underscore": "1.6.0"
   }
 }
