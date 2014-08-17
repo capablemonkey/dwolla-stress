@@ -26,7 +26,7 @@ describe('MassPay / Create', function() {
 			}
 		}
 		
-		_.range(10000).forEach(function() {items.push(item);})
+		_.range(5000).forEach(function() {items.push(item);})
 
 		arete.loadTest({
 			name: 'masspay-1000',
