@@ -22,9 +22,9 @@ describe('Account Info', function() {
 				if (err) return done(err);
 
 				assert.equal(report.successfulResponses.length, report.results.length, "We didn't get all successful responses!");
-        assert(report.averageResponseTimeInterval < 100, "Time between responses is way too long!");
-        assert(report.timeElapsed < 30e3, "Unacceptable amount of time for 1000 requests to complete: 30 seconds");
-        done();
+				assert(report.averageResponseTimeInterval < 100, "Time between responses is way too long!");
+				assert(report.timeElapsed < 30e3, "Unacceptable amount of time for 1000 requests to complete: 30 seconds");
+				done();
 			}
 		});
 
