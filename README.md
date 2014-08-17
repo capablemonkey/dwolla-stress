@@ -84,11 +84,11 @@ Average response time:  750.8 ms
 
 Writing tests is easy.  We use the [mocha](http://visionmedia.github.io/mocha/) framework for testing.  
 
-Create a new file in `test/`.  Start it off by importing `dwolla-node`, the keys file, etc.:
+Create a new file in `test/`.  Start it off by importing the keys file, `arete` and`dwolla-node`, in that order.
 
 ```
 var keys = require('../keys.js');
-var loadTest = require('./loadTest.js').loadTest;
+var arete = require('arete');
 var dwolla = require('dwolla-node')(keys.appKey, keys.appSecret);
 
 // flag to false to test production API
@@ -96,14 +96,23 @@ dwolla.sandbox = keys.sandbox;
 dwolla.setToken(keys.accessToken);
 ```
 
-Then the test itself is simple to write.  The `loadTest.js` module wraps the load testing functionality and overrides `http` and `https` so that it can force the max number of concurrent connections.  Just call the `loadTest` function, passing in a name for the test, number of times to make the API call, a bounded function containing the API call you want to make, and mocha's `done()` function as a callback.
+Then the test itself is simple to write.  The arete module wraps the load testing functionality and overrides `http` and `https` so that it can force the max number of concurrent connections.  Just call `arete.loadTest`, passing in a config object with the name for the test, number of times to make the API call, a bounded function containing the API call you want to make, and mocha's `done()` function as a callback.
 
 ```
 describe('Account Info', function() {
-	it('1000 Account Info lookup requests in quick succession', function(done) {
-		loadTest('test name', 1000, function(callback) {
-			dwolla.basicAccountInfo('gordon@dwolla.com', callback);
-		}, done);
+	it('1000 Account Info requests in quick succession', function(done) {
+		
+		arete.loadTest({
+			name: 'accountinfo-1000',
+			requests: 1000,
+			concurrentRequests: 100,
+			targetFunction: function(callback) {
+				dwolla.basicAccountInfo('gordon@dwolla.com', callback);
+			},
+			showResponses: false,
+			callback: done
+		});
+
 	});
 });
 ```
