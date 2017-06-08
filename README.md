@@ -82,7 +82,7 @@ Average response time:  750.8 ms
 
 ## Writing tests
 
-Writing tests is easy.  We use the [mocha](http://visionmedia.github.io/mocha/) framework for testing.  
+Writing tests is easy.  We use the [mocha](http://mochajs.org/) framework for testing.  
 
 Create a new file in `test/`.  Start it off by importing the keys file, `arete` and`dwolla-node`, in that order.
 
